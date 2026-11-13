@@ -297,4 +297,4 @@ elif menu == "📝 مشخصات و وضعیت کتاب‌ها":
         current = updates["paper_current_page"]
         if total > 0:
             st.progress(min(current / total, 1.0), text=f"پیشرفت مطالعه: {current} از {total} صفحه")
-Displaying app.py.
+
