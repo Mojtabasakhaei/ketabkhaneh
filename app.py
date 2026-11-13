@@ -9,6 +9,35 @@ from google import genai
 import edge_tts
 
 st.set_page_config(page_title="کتابخانه شخصی", page_icon="📚", layout="centered")
+import hmac
+
+try:
+app_password = st.secrets.get("APP_PASSWORD", "")
+except FileNotFoundError:
+app_password = ""
+
+if not app_password:
+st.error("رمز ورود برنامه هنوز تنظیم نشده است.")
+st.stop()
+
+if not st.session_state.get("authenticated", False):
+st.title("ورود به کتابخانه شخصی")
+
+with st.form("login_form"):
+password = st.text_input("رمز ورود", type="password")
+submitted = st.form_submit_button("ورود")
+
+if submitted:
+if hmac.compare_digest(
+password.encode("utf-8"),
+app_password.encode("utf-8")
+):
+st.session_state["authenticated"] = True
+st.rerun()
+else:
+st.error("رمز ورود درست نیست.")
+
+st.stop()
 
 conn = sqlite3.connect("library.db", check_same_thread=False)
 cursor = conn.cursor()
